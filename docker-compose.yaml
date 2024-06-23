@@ -1,4 +1,9 @@
-version: "3.4"
+version: '3.8'
+
 services:
   gost:
     build: .
+    image: your_dockerhub_username/gost:latest
+    container_name: gost
+    ports:
+      - "8080:8080"
