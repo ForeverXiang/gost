@@ -24,25 +24,10 @@ jobs:
     - name: Compile gost for Linux-amd64
       run: |
         cd gost/cmd/gost
-        GOOS=linux GOARCH=amd64 go build -o gost_linux_amd64
+        go build
 
     - name: Upload compiled binary
       uses: actions/upload-artifact@v3
       with:
         name: gost-linux-amd64
         path: gost/cmd/gost/gost_linux_amd64
-
-    - name: Build Docker image
-      run: |
-        docker build -t gost:latest .
-      
-    - name: Tag Docker image
-      run: |
-        IMAGE_ID=$(docker images -q gost:latest)
-        docker tag $IMAGE_ID your_dockerhub_username/gost:latest
-
-    - name: Login to DockerHub
-      run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
-
-    - name: Push Docker image to DockerHub
-      run: docker push your_dockerhub_username/gost:latest
