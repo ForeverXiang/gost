@@ -1,0 +1,33 @@
+name: Build and Compile
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: '1.21.7'  # 使用合适的Go版本
+
+    - name: Compile gost for Linux-amd64
+      run: |
+        cd gost/cmd/gost
+        GOOS=linux GOARCH=amd64 go build -o gost_linux_amd64
+
+    - name: Upload compiled binary
+      uses: actions/upload-artifact@v3
+      with:
+        name: gost-linux-amd64
+        path: gost/cmd/gost/gost_linux_amd64
